@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Noto+Sans">
+<link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <title>Plaster and Water Volume Calculator</title>
+    <style>
+        body {
+            font-family: "Libre Baskerville", serif;
+  font-size: 14px;
+            text-align: center;
+            background-color: 	PaleGoldenrod;
+        }
+        .highlight-yellow {
+            background-color: LightGoldenrodYellow;
+        }
+        .highlight-blue {
+            background-color: DarkKhaki;
+        }
+        h1 {
+           font-family: Oswald, sans-serif;
+           font-size:40px;
+        }
+        .result-number {
+            font-size: 28px;
+            font-weight: 900; 
+        }
+        .result-section {
+            margin-bottom: 25px;
+}
+        h2 {
+           font-size: 18px; 
+        }
+        h3 {
+           font-size: 16px; 
+        }
+        h4 {
+           font-family: 'Sofia';font-size: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Plaster and Water Volume Calculator</h1>
+
+<form id="calculatorForm">
+    <label for="shape">形狀:</label>
+    <select id="shape" required>
+        <option value="" selected="selected">選擇形狀</option>
+        <option value="cuboid">方體</option>
+        <option value="cylinder">圓柱體</option>
+    </select><br><br>
+
+    <div id="cuboidInputs" style="display:none;">
+        <label for="lengthCuboid">長度 (mm):</label>
+        <input type="text" step="1" id="lengthCuboid" required><br>
+
+        <label for="widthCuboid">寬度 (mm):</label>
+        <input type="text" step="1" id="widthCuboid" required><br>
+
+        <label for="heightCuboid">高度 (mm):</label>
+        <input type="text" step="1" id="heightCuboid" required><br><br>
+    </div>
+
+    <div id="cylinderInputs" style="display:none;">
+        <label for="diameterCylinder">直徑 (mm):</label>
+        <input type="text" step="1" id="diameterCylinder" required><br>
+
+        <label for="heightCylinder">高 (mm):</label>
+        <input type="text" step="1" id="heightCylinder" required><br><br>
+    </div>
+
+    <button type="button" onclick="calculateVolumes()">開始計算</button><br><br>
+
+    <div id="results" style="display:none;">
+        <div class="result-section">
+        <h2>計算結果:</h2>
+        </div>
+        <div class="result-section">
+            <h3>石膏量:</h3>
+            <p><span id="plasterVolume"class="result-number"></span> g</p>
+        </div>
+        <div class="result-section">
+            <h3>水量:</h3>
+            <p>ケース用:<br> <span id="waterVolume2"class="result-number"></span> g</p>
+            <p>混合用:<br> <span id="waterVolume3"class="result-number"></span> g</p>
+            <p class="highlight-yellow">原型用:<br> <span id="waterVolume1"class="result-number"></span> g</p>
+            <p class="highlight-blue">使用型用: <br><span id="waterVolume4"class="result-number"></span> g</p>
+        </div>
+    </div>
+</form>
+
+<script>
+    function calculateVolumes() {
+        const shape = document.getElementById("shape").value;
+        let plasterVolume, waterVolume1, waterVolume2, waterVolume3, waterVolume4;
+
+        if (shape === "cuboid") {
+            const length = parseInt(document.getElementById("lengthCuboid").value);
+            const width = parseInt(document.getElementById("widthCuboid").value);
+            const height = parseInt(document.getElementById("heightCuboid").value);
+
+            plasterVolume = Math.round((length * width * height / 1000) * 1.041);
+        } else if (shape === "cylinder") {
+            const diameter = parseInt(document.getElementById("diameterCylinder").value);
+            const heightCylinder = parseInt(document.getElementById("heightCylinder").value);
+
+            plasterVolume = Math.round(((diameter / 2)**2* 3.14 * heightCylinder / 1000) * 1.041);
+        }
+
+        waterVolume1 = Math.round(plasterVolume * 0.68); // 原型用
+        waterVolume2 = Math.round(plasterVolume * 0.4); // ケース用
+        waterVolume3 = Math.round(plasterVolume * 0.6); // 混合用
+        waterVolume4 = Math.round(plasterVolume * 0.78); // 使用型用
+
+        document.getElementById("plasterVolume").textContent = plasterVolume;
+        document.getElementById("waterVolume1").textContent = waterVolume1;
+        document.getElementById("waterVolume2").textContent = waterVolume2;
+        document.getElementById("waterVolume3").textContent = waterVolume3;
+        document.getElementById("waterVolume4").textContent = waterVolume4;
+
+        document.getElementById("results").style.display = "block";
+    }
+
+    document.getElementById("shape").addEventListener("change", function() {
+        const selectedShape = this.value;
+
+        if (selectedShape === "cuboid") {
+            document.getElementById("cuboidInputs").style.display = "block";
+            document.getElementById("cylinderInputs").style.display = "none";
+        } else if (selectedShape === "cylinder") {
+            document.getElementById("cuboidInputs").style.display = "none";
+            document.getElementById("cylinderInputs").style.display = "block";
+        }
+    });
+</script>
+<h4> &#128406;santa claus never comes to the tnnua &#128406;</h4>
+</body>
+</html>
